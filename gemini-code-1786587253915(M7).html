@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tool Management - Live Demo</title>
+  <style>
+    :root {
+      --outer-bg: #EEF1F5;
+      --app-bg: #f9fafb;
+      --card-bg: #ffffff;
+      --primary: #0f172a;
+      --accent: #16a34a;
+      --accent-light: #dcfce7;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --card-header-bg: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--outer-bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* Mobile Container Framework */
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      background-color: var(--app-bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Top Navigation Header */
+    .status-bar {
+      background-color: var(--card-bg);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent);
+      background-color: var(--accent-light);
+      padding: 4px 10px;
+      border-radius: 9999px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* Content Area */
+    .content {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Section Cards */
+    .section {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Hero Section: Product Name -> Picture -> Status */
+    .hero-section {
+      padding: 24px 16px 16px 16px;
+      text-align: center;
+    }
+
+    .main-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .model-subtitle {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      letter-spacing: 0.03em;
+    }
+
+    .product-img-wrapper {
+      width: 100%;
+      height: 180px;
+      background: #f1f5f9;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .product-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-main);
+    }
+
+    /* Card Header Bar */
+    .card-header {
+      background-color: var(--card-header-bg);
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    /* Data Table Formatting */
+    .data-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .data-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .data-label {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .data-value {
+      font-weight: 600;
+      color: var(--primary);
+      text-align: right;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+
+    .btn:active {
+      opacity: 0.8;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--border);
+      color: var(--primary);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      background-color: var(--card-bg);
+      margin-top: auto;
+    }
+
+    .footer strong {
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Top Bar -->
+    <header class="status-bar">
+      <div class="nav-title">
+        <span>← Tool Management</span>
+      </div>
+      <div class="status-badge">
+        <span class="dot"></span> Verified
+      </div>
+    </header>
+
+    <div class="content">
+      
+      <!-- 1. Product Name -> Picture -> Status -->
+      <section class="section hero-section">
+        <h1 class="main-title">SPANNER</h1>
+        <div class="model-subtitle">8" (200mm) | TL-WRENCH-200MM</div>
+        
+        <div class="product-img-wrapper">
+          <img src="S__46497801.jpg" alt="Adjustable Spanner" onerror="this.onerror=null; this.src='M7-02-1.jpg';">
+        </div>
+
+        <div class="status-row">
+          <div class="status-item">
+            <span style="color: var(--accent);">✔</span> In Stock
+          </div>
+          <div class="status-item">
+            <span style="color: #ef4444;">📍</span> Warehouse A-3 / Pegboard B
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Latest Activity -->
+      <section class="section">
+        <div class="card-header">Last Activity</div>
+        <div class="card-body">
+          <div class="data-grid">
+            <div class="data-row">
+              <span class="data-label">Checked Out Date</span>
+              <span class="data-value">2026/06/01</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">User</span>
+              <span class="data-value">Stanley Chen</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Last Inspection</span>
+              <span class="data-value">2026/01/15</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Information -->
+      <section class="section">
+        <div class="card-header">Information</div>
+        <div class="card-body">
+          <div class="data-grid">
+            <div class="data-row">
+              <span class="data-label">Tool Asset ID</span>
+              <span class="data-value">TL-WRENCH-8IN-042</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Assigned Station</span>
+              <span class="data-value">Workstation #03</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Maintenance Due</span>
+              <span class="data-value" style="color: #d97706;">2026/12/01</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Category</span>
+              <span class="data-value">Torque & Hand Tools</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Tag Type</span>
+              <span class="data-value">HF/NFC On-Metal Plug</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Actions -->
+      <div class="action-buttons">
+        <button class="btn btn-primary" onclick="alert('Tool checked out successfully!')">
+          📤 Check-Out Tool
+        </button>
+        <button class="btn btn-outline" onclick="alert('Opening inspection form...')">
+          📋 Log Maintenance Check
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      Powered by <strong>SAG</strong> — Demonstrating NFC Plug and Play Solution
+    </footer>
+  </div>
+
+</body>
+</html>
